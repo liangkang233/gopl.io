@@ -1,0 +1,14 @@
+dup2_test.txt
+dup2_test.txt
+dup2_test.txt
+dup2_test.txt
+hello world
+hello world
+hello world
+yes, this is dup2_test
+yes, this is dup2_test
+no closed
+yes
+ok
+fine
+fine

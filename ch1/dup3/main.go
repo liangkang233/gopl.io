@@ -19,6 +19,7 @@ import (
 func main() {
 	counts := make(map[string]int)
 	for _, filename := range os.Args[1:] {
+		//与dup2 scan每一行不同，ReadFile将整个文件数据转为字节切片读入至data中
 		data, err := ioutil.ReadFile(filename)
 		if err != nil {
 			fmt.Fprintf(os.Stderr, "dup3: %v\n", err)

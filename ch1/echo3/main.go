@@ -12,9 +12,27 @@ import (
 	"strings"
 )
 
+//!+ to test func
+func useJoin(args []string) string {
+	return strings.Join(args[0:], " ")
+}
+
+func useAdd(args []string) string {
+	s, sep := "", ""
+	for _, arg := range args[0:] {
+		s += sep + arg
+		sep = " "
+	}
+	return s
+}
+
+//!-
+
 //!+
 func main() {
 	fmt.Println(strings.Join(os.Args[1:], " "))
+	fmt.Println(useAdd(os.Args[1:]))
+	fmt.Println(useJoin(os.Args[1:]))
 }
 
 //!-

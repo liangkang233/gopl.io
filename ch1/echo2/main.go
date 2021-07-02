@@ -10,13 +10,16 @@ package main
 import (
 	"fmt"
 	"os"
+	"strconv"
 )
 
+// 练习1.2	打印索引和值
+// 不同于c，若数量级大，如此叠加字符开销较大
 func main() {
-	s, sep := "", ""
-	for _, arg := range os.Args[1:] {
-		s += sep + arg
-		sep = " "
+	s, seq := "", ""
+	for i, arg := range os.Args[1:] {
+		s += seq + strconv.Itoa(i) + " " + arg
+		seq = "\n"
 	}
 	fmt.Println(s)
 }
