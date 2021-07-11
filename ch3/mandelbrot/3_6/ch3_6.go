@@ -1,10 +1,4 @@
-// Copyright © 2016 Alan A. A. Donovan & Brian W. Kernighan.
-// License: https://creativecommons.org/licenses/by-nc-sa/4.0/
-
-// See page 61.
-//!+
-
-// Mandelbrot emits a PNG image of the Mandelbrot fractal.
+// 练习3.6： 升采样技术可以降低每个像素对计算颜色值和平均值的影响。简单的方法是将每个像素分成四个子像素，实现它。
 package main
 
 import (
@@ -20,26 +14,29 @@ func main() {
 	const (
 		xmin, ymin, xmax, ymax = -2, -2, +2, +2
 		width, height          = 1024, 1024
+		epsX                   = (xmax - xmin) / width
+		epsY                   = (ymax - ymin) / height
 	)
 
-	/* 	用于遍历1024x1024图像每个点的两个嵌套的循环对应-2到+2区间的复数平面。
-	   	程序反复测试每个点对应复数值平方值加一个增量值对应的点是否超出半径为2的圆。
-	   	如果超过了，通过根据预设置的逃逸迭代次数对应的灰度颜色来代替。
-	   	如果不是，那么该点属于Mandelbrot集合，使用黑色颜色标记。最终程序将生成的PNG格式分形图像输出到标准输出 */
+	offX := []float64{-epsX, epsX}
+	offY := []float64{-epsY, epsY}
+
 	img := image.NewRGBA(image.Rect(0, 0, width, height))
 	for py := 0; py < height; py++ {
 		y := float64(py)/height*(ymax-ymin) + ymin
 		for px := 0; px < width; px++ {
 			x := float64(px)/width*(xmax-xmin) + xmin
-			z := complex(x, y)
-			// Image point (px, py) represents complex value z.
-			img.Set(px, py, mandelbrot(z))
-			// img.Set(px, py, acos(z))
-			// img.Set(px, py, sqrt(z))
-			// img.Set(px, py, newton(z))
+			subPixels := make([]color.Color, 0)
+			// 取四个子像素的颜色的平均值
+			for i := 0; i < 2; i++ {
+				for j := 0; j < 2; j++ {
+					z := complex(x+offX[i], y+offY[j])
+					subPixels = append(subPixels, mandelbrot(z))
+				}
+			}
+			img.Set(px, py, avg(subPixels))
 		}
 	}
-
 	if len(os.Args) > 1 { //生成文件
 		filename := os.Args[1]
 		if !strings.HasSuffix(filename, ".png") {
@@ -64,52 +61,11 @@ func mandelbrot(z complex128) color.Color {
 	for n := uint8(0); n < iterations; n++ {
 		v = v*v + z
 		if cmplx.Abs(v) > 2 {
-			// 练习3.5 网上找的用contrast算的
-			// return getColor(n)
-			return color.Gray{255 - contrast*n}
-			// 练习3.5
-			// blue := uint8(real(v)*128) + 127
-			// return color.YCbCr{192, blue, 192}
+			return getColor(n)
 		}
 	}
 	return color.Black
 }
-
-//!-
-
-// Some other interesting functions:
-
-func acos(z complex128) color.Color {
-	v := cmplx.Acos(z)
-	blue := uint8(real(v)*128) + 127
-	red := uint8(imag(v)*128) + 127
-	return color.YCbCr{192, blue, red}
-}
-
-func sqrt(z complex128) color.Color {
-	v := cmplx.Sqrt(z)
-	blue := uint8(real(v)*128) + 127
-	red := uint8(imag(v)*128) + 127
-	return color.YCbCr{128, blue, red}
-}
-
-// f(x) = x^4 - 1
-//
-// z' = z - f(z)/f'(z)
-//    = z - (z^4 - 1) / (4 * z^3)
-//    = z - (z - 1/z^3) / 4
-func newton(z complex128) color.Color {
-	const iterations = 37
-	const contrast = 7
-	for i := uint8(0); i < iterations; i++ {
-		z -= (z - 1/(z*z*z)) / 4
-		if cmplx.Abs(z*z*z*z-1) < 1e-6 {
-			return color.Gray{255 - contrast*i}
-		}
-	}
-	return color.Black
-}
-
 func getColor(n uint8) color.Color {
 	paletted := [16]color.Color{
 		color.RGBA{66, 30, 15, 255},    // # brown 3
@@ -130,4 +86,17 @@ func getColor(n uint8) color.Color {
 		color.RGBA{106, 52, 3, 255},    // # brown 2
 	}
 	return paletted[n%16]
+}
+
+func avg(colors []color.Color) color.Color {
+	var r, g, b, a uint16
+	n := len(colors)
+	for _, c := range colors {
+		r_, g_, b_, a_ := c.RGBA()
+		r += uint16(r_ / uint32(n))
+		g += uint16(g_ / uint32(n))
+		b += uint16(b_ / uint32(n))
+		a += uint16(a_ / uint32(n))
+	}
+	return color.RGBA64{r, g, b, a}
 }

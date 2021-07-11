@@ -6,11 +6,13 @@ package popcount_test
 import (
 	"testing"
 
-	"gopl.io/ch2/popcount"
+	// "gopl.io/ch2/popcount"
+	"gopl/ch2/popcount"
 )
 
 // -- Alternative implementations --
 
+// 没太看懂，不重要
 func BitCount(x uint64) int {
 	// Hacker's Delight, Figure 5-2.
 	x = x - ((x >> 1) & 0x5555555555555555)
@@ -22,6 +24,7 @@ func BitCount(x uint64) int {
 	return int(x & 0x7f)
 }
 
+// 练习2.5	表达式x&(x-1)用于将x的最低一个非零的bit位清零
 func PopCountByClearing(x uint64) int {
 	n := 0
 	for x != 0 {
@@ -31,6 +34,7 @@ func PopCountByClearing(x uint64) int {
 	return n
 }
 
+// 练习2.4  用移位算法重写PopCount函数，每次测试最右边的1bit，然后统计总数。
 func PopCountByShifting(x uint64) int {
 	n := 0
 	for i := uint(0); i < 64; i++ {
@@ -49,11 +53,41 @@ func BenchmarkPopCount(b *testing.B) {
 	}
 }
 
+// goos: windows	BenchmarkPopCount
+// goarch: amd64
+// pkg: gopl/ch2/popcount
+// cpu: Intel(R) Core(TM) i5-10500 CPU @ 3.10GHz
+// BenchmarkPopCount-12    	1000000000	         0.2360 ns/op	       0 B/op	       0 allocs/op
+// PASS
+// ok  	gopl/ch2/popcount	0.326s
+
+func BenchmarkMyPopCount(b *testing.B) {
+	for i := 0; i < b.N; i++ {
+		popcount.MyPopCount(0x1234567890ABCDEF)
+	}
+}
+
+// goos: windows	BenchmarkMyPopCount
+// goarch: amd64
+// pkg: gopl/ch2/popcount
+// cpu: Intel(R) Core(TM) i5-10500 CPU @ 3.10GHz
+// BenchmarkMyPopCount-12    	219764240	         5.290 ns/op	       0 B/op	       0 allocs/op
+// PASS
+// ok  	gopl/ch2/popcount	1.815s
+
 func BenchmarkBitCount(b *testing.B) {
 	for i := 0; i < b.N; i++ {
 		BitCount(0x1234567890ABCDEF)
 	}
 }
+
+// goos: windows	BenchmarkBitCount
+// goarch: amd64
+// pkg: gopl/ch2/popcount
+// cpu: Intel(R) Core(TM) i5-10500 CPU @ 3.10GHz
+// BenchmarkBitCount-12    	1000000000	         0.2513 ns/op	       0 B/op	       0 allocs/op
+// PASS
+// ok  	gopl/ch2/popcount	0.356s
 
 func BenchmarkPopCountByClearing(b *testing.B) {
 	for i := 0; i < b.N; i++ {
@@ -61,11 +95,27 @@ func BenchmarkPopCountByClearing(b *testing.B) {
 	}
 }
 
+// goos: windows	BenchmarkPopCountByClearing
+// goarch: amd64
+// pkg: gopl/ch2/popcount
+// cpu: Intel(R) Core(TM) i5-10500 CPU @ 3.10GHz
+// BenchmarkPopCountByClearing-12    	63029512	        19.62 ns/op	       0 B/op	       0 allocs/op
+// PASS
+// ok  	gopl/ch2/popcount	1.351s
+
 func BenchmarkPopCountByShifting(b *testing.B) {
 	for i := 0; i < b.N; i++ {
 		PopCountByShifting(0x1234567890ABCDEF)
 	}
 }
+
+// goos: windows	BenchmarkPopCountByShifting
+// goarch: amd64
+// pkg: gopl/ch2/popcount
+// cpu: Intel(R) Core(TM) i5-10500 CPU @ 3.10GHz
+// BenchmarkPopCountByShifting-12    	57874556	        20.53 ns/op	       0 B/op	       0 allocs/op
+// PASS
+// ok  	gopl/ch2/popcount	1.290s
 
 // Go 1.6, 2.67GHz Xeon
 // $ go test -cpu=4 -bench=. gopl.io/ch2/popcount

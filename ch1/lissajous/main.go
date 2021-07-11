@@ -61,7 +61,7 @@ func main() {
 	}
 }
 
-/*  直接.\lissajous.exe > outfile 编码有误，
+/*  直接.\lissajous.exe > outfile 编码有误，	LK233 note
 *	一种解决方式如上直接生成文件流写入
 *	还有一种是写入lissajous字节内存中，再生成到文件
 *	buf := &bytes.Buffer{}

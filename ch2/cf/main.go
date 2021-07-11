@@ -12,7 +12,8 @@ import (
 	"os"
 	"strconv"
 
-	"gopl.io/ch2/tempconv"
+	// "gopl.io/ch2/tempconv"
+	"gopl/ch2/tempconv" //导入本地包,根路径为本地包的模块名，类似上面的导入存在src的包
 )
 
 func main() {
