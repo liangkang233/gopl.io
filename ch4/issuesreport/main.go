@@ -58,7 +58,11 @@ func noMust() {
 	if err != nil {
 		log.Fatal(err)
 	}
+	// template.Must辅助函数可以简化这个致命错误的处理：
+	// 它接受一个模板和一个error类型的参数，检测error是否为nil
+	// （如果不是nil则发出panic异常），然后返回传入的模板。
 	//!-parse
+
 	result, err := github.SearchIssues(os.Args[1:])
 	if err != nil {
 		log.Fatal(err)
@@ -67,23 +71,3 @@ func noMust() {
 		log.Fatal(err)
 	}
 }
-
-/*
-//!+output
-$ go build gopl.io/ch4/issuesreport
-$ ./issuesreport repo:golang/go is:open json decoder
-13 issues:
-----------------------------------------
-Number: 5680
-User:   eaigner
-Title:  encoding/json: set key converter on en/decoder
-Age:    750 days
-----------------------------------------
-Number: 6050
-User:   gopherbot
-Title:  encoding/json: provide tokenizer
-Age:    695 days
-----------------------------------------
-...
-//!-output
-*/

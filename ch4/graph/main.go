@@ -3,6 +3,11 @@
 
 // See page 99.
 
+/*
+Map的value类型也可以是一个聚合类型，比如是一个map或slice。在下面的代码中，
+图graph的key类型是一个字符串，value类型map[string]bool代表一个字符串集合。
+从概念上讲，graph将一个字符串类型的key映射到一组相关的字符串集合，它们指向新的graph的key。 */
+
 // Graph shows how to use a map of maps to represent a directed graph.
 package main
 

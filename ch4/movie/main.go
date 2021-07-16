@@ -30,9 +30,12 @@ var movies = []Movie{
 	// ...
 }
 
-//!-
+//LK233 note JSON的使用
+// 在编码时，默认使用Go语言结构体的成员名字作为JSON的对象（通过reflect反射技术，我们将在12.6节讨论）。
+// 只有导出的结构体成员才会被编码，这也就是我们为什么选择用大写字母开头的成员名称。
 
 func main() {
+	// 无格式json编码
 	{
 		//!+Marshal
 		data, err := json.Marshal(movies)
@@ -43,6 +46,7 @@ func main() {
 		//!-Marshal
 	}
 
+	// 有格式json编码
 	{
 		//!+MarshalIndent
 		data, err := json.MarshalIndent(movies, "", "    ")
@@ -60,45 +64,21 @@ func main() {
 		fmt.Println(titles) // "[{Casablanca} {Cool Hand Luke} {Bullitt}]"
 		//!-Unmarshal
 	}
+
+	/* 	json解码
+	编码的逆操作是解码，对应将JSON数据解码为Go语言的数据结构，Go语言中一般叫unmarshaling，
+	通过json.Unmarshal函数完成。下面的代码将JSON格式的电影数据解码为一个结构体slice，
+	结构体中只有Title成员。通过定义合适的Go语言数据结构，我们可以选择性地解码JSON中感兴趣的成员。
+	当Unmarshal函数调用返回，slice将被只含有Title信息的值填充，其它JSON成员将被忽略。 */
+	{
+		data, err := json.Marshal(movies)
+		if err != nil {
+			log.Fatalf("JSON marshaling failed: %s", err)
+		}
+		var titles []struct{ Title string }
+		if err := json.Unmarshal(data, &titles); err != nil {
+			log.Fatalf("JSON unmarshaling failed: %s", err)
+		}
+		fmt.Printf("test Unmarshal: %s", titles) // "[{Casablanca} {Cool Hand Luke} {Bullitt}]"
+	}
 }
-
-/*
-//!+output
-[{"Title":"Casablanca","released":1942,"Actors":["Humphrey Bogart","Ingr
-id Bergman"]},{"Title":"Cool Hand Luke","released":1967,"color":true,"Ac
-tors":["Paul Newman"]},{"Title":"Bullitt","released":1968,"color":true,"
-Actors":["Steve McQueen","Jacqueline Bisset"]}]
-//!-output
-*/
-
-/*
-//!+indented
-[
-    {
-        "Title": "Casablanca",
-        "released": 1942,
-        "Actors": [
-            "Humphrey Bogart",
-            "Ingrid Bergman"
-        ]
-    },
-    {
-        "Title": "Cool Hand Luke",
-        "released": 1967,
-        "color": true,
-        "Actors": [
-            "Paul Newman"
-        ]
-    },
-    {
-        "Title": "Bullitt",
-        "released": 1968,
-        "color": true,
-        "Actors": [
-            "Steve McQueen",
-            "Jacqueline Bisset"
-        ]
-    }
-]
-//!-indented
-*/

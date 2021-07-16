@@ -25,6 +25,10 @@ func main() {
 	for _, item := range result.Items {
 		fmt.Printf("#%-5d %9.9s %.55s\n",
 			item.Number, item.User.Login, item.Title)
+		// item.CreatedAt.After()
+		// fmt.Printf("#%-5d %9.9s %.55s %.10s %s\n",
+		// 	item.Number, item.User.Login, item.Title, item.CreatedAt.)
+		// 上面总计数计算的包括 删除的issue，打印的数据只有现存的
 	}
 }
 

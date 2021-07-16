@@ -51,7 +51,7 @@ bytes包也提供了很多类似功能的函数，[]byte类型和字符串有着
 字符串是只读的，逐步构建字符串会导致很多分配和复制。
 在这种情况下，使用bytes.Buffer类型将会更有效， */
 
-// 练习3.9 使用迭代代替递归，使用bytes.Buffer代替字符串链接操作。
+// 练习3.10 使用迭代代替递归，使用bytes.Buffer代替字符串链接操作。
 func comma1(s string) string {
 	var buffer bytes.Buffer
 	n, t := len(s), len(s)%3
@@ -64,7 +64,7 @@ func comma1(s string) string {
 	return buffer.String()
 }
 
-// 练习3.10 支持浮点数和可选的正负号处理
+// 练习3.11 支持浮点数和可选的正负号处理
 func comma2(s string) string {
 	if s == "" {
 		return s
@@ -83,7 +83,7 @@ func comma2(s string) string {
 	return buffer.String()
 }
 
-// 练习3.11 判断两个字符串是否打乱
+// 练习3.12 判断两个字符串是否打乱
 func comma3(s string, s1 string) bool {
 	//LK233 note
 	// 由于go对utf8编码的支持，rune相当于每个字符(自动查找该字符有几位，字符串的range也是如此)，而byte一直都是一个字节
