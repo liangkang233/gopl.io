@@ -22,6 +22,7 @@ func main() {
 	defer conn.Close()
 	go mustCopy(os.Stdout, conn)
 	mustCopy(conn, os.Stdin)
+	// 可以传输 输入值 给套接字
 }
 
 //!-

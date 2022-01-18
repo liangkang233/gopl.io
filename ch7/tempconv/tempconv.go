@@ -60,6 +60,7 @@ func (f *celsiusFlag) Set(s string) error {
 func CelsiusFlag(name string, value Celsius, usage string) *Celsius {
 	f := celsiusFlag{value}
 	flag.CommandLine.Var(&f, name, usage)
+	// 相当于给flag包的Value接口中实现了celsiusFlag类型的set方法
 	return &f.Celsius
 }
 

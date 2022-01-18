@@ -32,8 +32,24 @@ func outline(url string) error {
 		return err
 	}
 
+	// 练习5.12
+	var mydepth int
+	sElement := func(n *html.Node) {
+		if n.Type == html.ElementNode {
+			fmt.Printf("%*s</%s>\n", mydepth*2, "", n.Data)
+			mydepth--
+		}
+	}
+	eElement := func(n *html.Node) {
+		if n.Type == html.ElementNode {
+			fmt.Printf("%*s</%s>\n", mydepth*2, "", n.Data)
+			mydepth--
+		}
+	}
+
 	//!+call
-	forEachNode(doc, startElement, endElement)
+	// forEachNode(doc, startElement, endElement)
+	forEachNode(doc, sElement, eElement)
 	//!-call
 
 	return nil

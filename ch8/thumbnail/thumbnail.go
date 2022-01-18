@@ -80,7 +80,7 @@ func ImageFile2(outfile, infile string) (err error) {
 // a thumbnail-size version of it in the same directory.
 // It returns the generated file name, e.g. "foo.thumb.jpeg".
 func ImageFile(infile string) (string, error) {
-	ext := filepath.Ext(infile) // e.g., ".jpg", ".JPEG"
-	outfile := strings.TrimSuffix(infile, ext) + ".thumb" + ext
+	ext := filepath.Ext(infile)                                 // e.g., ".jpg", ".JPEG"	// 例如 E:\Task\Study_Go\gopl.io\ch8\thumbnail\test.jpg
+	outfile := strings.TrimSuffix(infile, ext) + ".thumb" + ext //删除后缀并添加后缀.huumb.ext后缀 ext为上述路径读取的文件类型后缀
 	return outfile, ImageFile2(outfile, infile)
 }

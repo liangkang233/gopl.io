@@ -47,7 +47,7 @@ var pc [256]byte = func() (pc [256]byte) {
 	for i := range pc {
 		pc[i] = pc[i/2] + byte(i&1)
 	}
-	return //返回值为pc，所以不用函数内声明也可。默认是返回pc变量、return不补齐也可  LK233 note
+	return //返回值显示声明为pc，所以不用函数内声明也可。默认是返回pc变量、return不补齐也可（bare return）  LK233 note
 }() */
 
 //!-

@@ -15,6 +15,15 @@ import (
 	"time"
 )
 
+/*
+go run .\ch8\reverb1\reverb.go
+go run .\ch8\netcat2\netcat.go
+hello
+         HELLO
+         hello
+         hello
+*/
+
 //!+
 func echo(c net.Conn, shout string, delay time.Duration) {
 	fmt.Fprintln(c, "\t", strings.ToUpper(shout))

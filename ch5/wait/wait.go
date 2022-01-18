@@ -18,6 +18,7 @@ import (
 // WaitForServer attempts to contact the server of a URL.
 // It tries for one minute using exponential back-off.
 // It reports an error if all attempts fail.
+// LK233 note  定时重试模板
 func WaitForServer(url string) error {
 	const timeout = 1 * time.Minute
 	deadline := time.Now().Add(timeout)

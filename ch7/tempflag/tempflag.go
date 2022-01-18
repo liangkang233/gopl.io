@@ -10,7 +10,7 @@ import (
 	"flag"
 	"fmt"
 
-	"gopl.io/ch7/tempconv"
+	"gopl/ch7/tempconv"
 )
 
 //!+
@@ -21,4 +21,7 @@ func main() {
 	fmt.Println(*temp)
 }
 
+// 练习 7.7： 解释为什么帮助信息在它的默认值是20.0没有包含°C的情况下输出了°C。
+// 因为帮助信息回打印默认值，此处value为20 类型为Celsius f := celsiusFlag{value}
+// 其中定义了string即可打印出 20°C
 //!-
